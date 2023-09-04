@@ -2,10 +2,17 @@ import React, { JSX } from 'react';
 import { Link } from 'react-router-dom';
 import useForm from './useForm';
 import './Form.css';
+import ErrorToast from '../ErrorToast/ErrorToast';
 
 const Form = (): JSX.Element => {
-  const { loginPathname, submitForm, handleAnyInput, errorMessages } =
-    useForm();
+  const {
+    loginPathname,
+    submitForm,
+    handleAnyInput,
+    errorMessages,
+    showError,
+    errorToastHandler,
+  } = useForm();
 
   return (
     <div className="container container-app">
@@ -85,6 +92,11 @@ const Form = (): JSX.Element => {
             </Link>
           </div>
         </form>
+        <ErrorToast
+          message={errorMessages}
+          show={showError}
+          onClose={errorToastHandler}
+        />
       </div>
     </div>
   );

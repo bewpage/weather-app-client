@@ -12,7 +12,7 @@ const options = ({
   method,
   headers: {
     'Content-Type': 'application/json',
-    Authorization: `${apiToken}`,
+    Authorization: apiToken ? `Bearer ${apiToken}` : '',
   },
   body: JSON.stringify(body),
 });
@@ -23,7 +23,7 @@ const baseAPI = async (url: string, options?: any): Promise<any> => {
   if (response.ok) {
     return data;
   } else {
-    throw response;
+    throw data;
   }
 };
 

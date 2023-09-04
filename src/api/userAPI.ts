@@ -25,5 +25,4 @@ const singUpUser = async ({ email, password, username }: FormDataType) => {
 const getUser = async (apiToken: string) => {
   return await baseAPI(`${USERS_API_URL}/me`, options({ apiToken }));
 };
-
 export { loginUser, singUpUser, getUser, options };

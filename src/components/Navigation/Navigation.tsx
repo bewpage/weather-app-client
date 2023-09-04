@@ -111,6 +111,13 @@ const Navigation = () => {
                     </NavLink>
                   </li>
                 ) : null}
+                {isAuthTokens ? (
+                  <li className="nav-item">
+                    <NavLink className="nav-link" to="/dashboard">
+                      Dashboard
+                    </NavLink>
+                  </li>
+                ) : null}
                 <li className="nav-item">
                   {isAuthTokens ? navItems.logout : navItems.login}
                 </li>
