@@ -8,6 +8,7 @@ import Form from './components/UserAuth/Form';
 import Dashboard from './components/Dashboard/Dashboard';
 
 import './App.css';
+import WeatherService from './components/WeatherService/WeatherService';
 
 function App() {
   return (
@@ -24,6 +25,10 @@ function App() {
                   <Route path="/signup" element={<Form />} />
                   <Route element={<PrivateRoute />}>
                     <Route path="/dashboard" element={<Dashboard />} />
+                    <Route
+                      path="/weatherservice"
+                      element={<WeatherService />}
+                    />
                   </Route>
                 </Routes>
               </main>

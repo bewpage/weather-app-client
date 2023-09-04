@@ -11,6 +11,11 @@ enum AuthEnums {
   USER_ID = 'userId',
 }
 
+export type UserInfoType = {
+  username: string;
+  email: string;
+};
+
 export type AuthAPIType = {
   token: string | null;
   user_id: string | null;
@@ -19,7 +24,9 @@ export type AuthAPIType = {
 type AuthDataType = {
   authTokens: AuthAPIType['token'];
   userId: AuthAPIType['user_id'];
+  userInfo?: UserInfoType;
   errorMessages: string;
+  showError: boolean;
   isAuthTokens: boolean;
 };
 
@@ -28,7 +35,9 @@ type AuthActionType = {
   payload: {
     authTokens?: AuthAPIType['token'];
     userId?: AuthAPIType['user_id'];
+    userInfo?: UserInfoType;
     errorMessages?: string;
+    showError?: boolean;
     isAuthTokens?: boolean;
   };
 };
@@ -48,6 +57,7 @@ export enum AuthActionEnum {
   LOGIN = 'LOGIN',
   LOGOUT = 'LOGOUT',
   SET_USER_ID = 'SET_USER_ID',
+  GET_USER_INFO = 'GET_USER_INFO',
   ERROR_MESSAGE = 'ERROR_MESSAGE',
 }
 
@@ -60,7 +70,12 @@ export const INITIAL_STATE: AuthContextType = {
   state: {
     authTokens: 'null',
     userId: 'null',
+    userInfo: {
+      username: '',
+      email: '',
+    },
     errorMessages: '',
+    showError: false,
     isAuthTokens: false,
   },
   dispatch: () => null,
@@ -95,6 +110,7 @@ const initialState = {
     authTokens: initialToken(),
     userId: initialUserId(),
     errorMessages: '',
+    showError: false,
     isAuthTokens: checkAuthTokens(initialToken()),
   },
 };
@@ -132,6 +148,13 @@ export const authReducer = (
           isAuthTokens: checkAuthTokens(action.payload.authTokens),
         },
       };
+    case AuthActionEnum.GET_USER_INFO:
+      return {
+        state: {
+          ...state.state,
+          ...action.payload,
+        },
+      };
     case AuthActionEnum.ERROR_MESSAGE:
       let errorMessages;
       if (action.payload.errorMessages !== undefined) {
@@ -145,6 +168,7 @@ export const authReducer = (
         state: {
           ...state.state,
           errorMessages,
+          showError: errorMessages.length > 0,
         },
       };
     default:

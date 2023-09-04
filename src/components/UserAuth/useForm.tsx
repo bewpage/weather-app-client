@@ -12,12 +12,12 @@ export type FormDataType = {
 const useForm = () => {
   const { pathname } = useLocation();
   let navigate = useNavigate();
-  const loginPathname = pathname === '/login';
+  const formPathname = pathname === '/login';
   const {
-    state: { authTokens, errorMessages, isAuthTokens },
+    state: { authTokens, errorMessages, isAuthTokens, showError },
     dispatch,
   } = useAuthContext();
-  const [loginData, setLoginData] = useState<FormDataType>({
+  const [formData, setFormData] = useState<FormDataType>({
     email: '',
     password: '',
     passwordCheck: '',
@@ -26,33 +26,37 @@ const useForm = () => {
 
   useEffect(() => {
     if (isAuthTokens) {
-      navigate('/recipes');
+      navigate('/dashboard');
     }
   }, [isAuthTokens]);
 
   const submitForm = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (loginPathname) {
-      (async () => callAPILoginUser(loginData))();
+    if (formPathname) {
+      (async () => callAPILoginUser(formData))();
     } else {
-      if (validateUserSingUpForm(loginData)) {
-        (async () => callAPISignUpUser(loginData))();
+      if (validateUserSingUpForm(formData)) {
+        (async () => callAPISignUpUser(formData))();
+        setFormData({
+          email: '',
+          password: '',
+          passwordCheck: '',
+          username: '',
+        });
+        // clean form inputs
+        e.currentTarget.reset();
+        // redirect to login page
+        navigate('/login');
       }
     }
-    // setLoginData({
-    //   email: '',
-    //   password: '',
-    // });
-    // // clean form inputs
-    // e.currentTarget.reset();
   };
   const handleAnyInput = (
     e: ChangeEvent<HTMLInputElement>,
     nameInState: string
   ): void => {
     const value = e.target.value;
-    setLoginData({
-      ...loginData,
+    setFormData({
+      ...formData,
       [nameInState]: value,
     });
   };
@@ -165,11 +169,23 @@ const useForm = () => {
     }
   };
 
+  const errorToastHandler = () => {
+    dispatch({
+      type: AuthActionEnum.ERROR_MESSAGE,
+      payload: {
+        errorMessages: '',
+        showError: false,
+      },
+    });
+  };
+
   return {
     submitForm,
     handleAnyInput,
-    loginPathname,
+    loginPathname: formPathname,
     errorMessages,
+    showError,
+    errorToastHandler,
   };
 };
 
