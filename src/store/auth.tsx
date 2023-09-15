@@ -156,19 +156,12 @@ export const authReducer = (
         },
       };
     case AuthActionEnum.ERROR_MESSAGE:
-      let errorMessages;
-      if (action.payload.errorMessages !== undefined) {
-        errorMessages = Object.entries(action.payload.errorMessages)
-          .map(([key, value]) => `${key} ${value}`)
-          .join('. ');
-      } else {
-        errorMessages = action.payload ? '' : action.payload;
-      }
+      let { errorMessages } = action.payload;
       return {
         state: {
           ...state.state,
-          errorMessages,
-          showError: errorMessages.length > 0,
+          errorMessages: errorMessages || '',
+          showError: errorMessages !== undefined && errorMessages.length > 0,
         },
       };
     default:

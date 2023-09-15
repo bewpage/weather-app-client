@@ -63,7 +63,6 @@ const WeatherService = () => {
     const params: OptionsEnum[] = [];
     for (const key in obj) {
       if (obj[key as OptionsEnum]) {
-        console.log('key:', key);
         params.push(key as OptionsEnum);
       }
     }
@@ -74,6 +73,7 @@ const WeatherService = () => {
     // Validate that the city is not empty
     if (!city.trim()) {
       console.log('City is required');
+
       return;
     }
 
@@ -94,7 +94,6 @@ const WeatherService = () => {
         convertObjectToArrayParams(options),
         authTokens
       );
-      console.log('result:', result);
       const { weatherReportData, weatherReportInfo } = result;
       setWeatherData({ weatherReportData, weatherReportInfo });
       // clean form inputs
