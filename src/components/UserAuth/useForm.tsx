@@ -37,6 +37,7 @@ const useForm = () => {
     } else {
       if (validateUserSingUpForm(formData)) {
         (async () => callAPISignUpUser(formData))();
+        // clean form data
         setFormData({
           email: '',
           password: '',
@@ -45,8 +46,6 @@ const useForm = () => {
         });
         // clean form inputs
         e.currentTarget.reset();
-        // redirect to login page
-        navigate('/login');
       }
     }
   };
@@ -89,7 +88,6 @@ const useForm = () => {
           },
         });
         localStorage.setItem(AuthEnums.TOKEN, JSON.stringify(jwtToken));
-        // localStorage.setItem(AuthEnums.USER_ID, JSON.stringify(userId));
         navigate('/dashboard');
       }
     } catch (err: any) {
@@ -143,6 +141,7 @@ const useForm = () => {
       });
       return false;
     }
+
     return true;
   };
 
@@ -162,9 +161,7 @@ const useForm = () => {
     } catch (err: any) {
       dispatch({
         type: AuthActionEnum.ERROR_MESSAGE,
-        payload: {
-          errorMessages: err,
-        },
+        payload: err,
       });
     }
   };
